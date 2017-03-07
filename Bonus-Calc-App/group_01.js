@@ -7,7 +7,8 @@ var mayella = ["Mayella", "89068", "35000", 2];
 
 var employees = [atticus, jem, boo, scout, robert, mayella];
 
-
+var employeeTitles = ["Name","Employee Number","Yearly Salary","Bonus Rating"];
+var resultsTitles = ["Name","Bonus Percent", "Salary with Bonus","Bonus"];
 function bonusCalc (employeeNum, salary, rating){
 
   var bonusPercent = 0;
@@ -58,29 +59,40 @@ result [2] = basePay + bonus;
 result [3] = Math.round(bonus);
 
 return result;
-
 }
 
 
 function master (employees) {
   for (var i = 0; i < employees.length; i++){
+    var resultArray = [];
     console.log(empOutput(employees[i]));
-  }
+    resultArray = empOutput(employees[i]);
+    $('body').append('<ul> Employee: '+ employees[i][0]+'</ul>');
+    console.log(employees[i].length);
+      for (var j = 0; j < employees[i].length; j++){
+        $('body').append('<li>'+employeeTitles[j]+': '+employees[i][j]+'</li>');
+      }
+      for (var k = 1; k < resultArray.length; k++){
+        $('body').append('<li>'+resultsTitles[k]+': '+resultArray[k]+'</li>');
+      }
+    // $('body').append('<p>'+resultArray+'</p>');
 
+
+  }
 }
 
 
 master(employees);
 
 
-console.log(bonusCalc('1234', '30000', 2));
-console.log(bonusCalc('3454', '7000', 3));
-console.log(bonusCalc('56789', '70000', 5));
-console.log(bonusCalc('78956', '65000', 3));
-
-
-
-console.log(empOutput(['Cooper', '1234', '30000', 2]));
-console.log(empOutput(['Heraldo', '56789', '70000', 5]));
-console.log(empOutput(['Blue', '3454', '7000', 3 ]));
-console.log(empOutput(['Montel', '87654', '65000', 3]));
+// console.log(bonusCalc('1234', '30000', 2));
+// console.log(bonusCalc('3454', '7000', 3));
+// console.log(bonusCalc('56789', '70000', 5));
+// console.log(bonusCalc('78956', '65000', 3));
+//
+//
+//
+// console.log(empOutput(['Cooper', '1234', '30000', 2]));
+// console.log(empOutput(['Heraldo', '56789', '70000', 5]));
+// console.log(empOutput(['Blue', '3454', '7000', 3 ]));
+// console.log(empOutput(['Montel', '87654', '65000', 3]));
