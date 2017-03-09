@@ -7,49 +7,57 @@ var mayella = ["Mayella", "89068", "35000", 2];
 
 var employees = [atticus, jem, boo, scout, robert, mayella];
 
+var resultArray = [];
+
 var employeeTitles = ["Name","Employee Number","Yearly Salary","Bonus Rating"];
 var resultsTitles = ["Name","Bonus Percent", "Salary with Bonus","Bonus"];
-function bonusCalc (employeeNum, salary, rating){
 
-  var bonusPercent = 0;
+// Constants Below
 
-  switch (rating) {
-    case 3:
-    bonusPercent += 0.04;
-    break;
+var reviewScore1 = 0;
+var reviewScore2 = 0;
+var reviewScore3 = 0.4;
+var reviewScore4 = 0.6;
+var reviewScore5 = 0.10;
 
-    case 4:
-    bonusPercent += 0.06;
-    break;
+var seniorityEmployeeIDLength = 4;
+var seniorityBonusAdjustment = 0.05;
 
-    case 5:
-    bonusPercent += 0.10;
-    break;
+var salaryMax = 65000;
+var salaryMaxPercentAdjustment = 0.01;
+
+var bonusMax = 0.13;
+var bonusMin = 0;
+
+
+
+//list of functions
+//main function - runs the whole show
+//  createBonusDataArray  - creates the array of new data for each employee
+//                      1. name
+//                      2. bonus percent
+//                      3. salary + bonus
+//                      4. bonus in dollar ammount
+//    calculateBonusPercent- calculates bonus percent
+//      getReviewScoreAdjustment - determines percent increase based on review
+//      getSeniorityAdjustment - determines if employee has seniority adjustment
+//      getSalaryAdjustment - determines if employee exceeds salary threshold
+//      getPercentageRange - determines if bonus falls within acceptable range
+//    displayDataArrays - displays new array of information
+
+main(employees);
+
+function main(employees) {
+  for (var i = 0; i < employees.length; i++){
+    resultArray = empOutput(employees[i]);
+    displayDataArrays(employees[i],resultArray);
+  }
 }
-
-  if (employeeNum.length == 4) {
-    bonusPercent += 0.05;
-  }
-
-  if (salary.parseInt > 65000) {
-    bonusPercent = 0.01;
-  }
-
-  if(bonusPercent > 0.13) {
-    bonusPercent = 0.13;
-  }
-
-  else if (bonusPercent < 0) {
-    bonusPercent = 0;
-  }
-  return bonusPercent;
-}
-
 
 function empOutput (employee) {
 var result = [];
 var basePay = parseInt(employee[2]);
-var bonusPercent = bonusCalc(employee[1], employee[2], employee[3]);
+var bonusPercent = calculateBonusPercent(employee[1], employee[2], employee[3]);
 var bonus = basePay * bonusPercent;
 
 
@@ -61,38 +69,83 @@ result [3] = Math.round(bonus);
 return result;
 }
 
+function calculateBonusPercent(employeeNum,salary,rating){
+  var bonusPercentCalc;
 
-function master (employees) {
-  for (var i = 0; i < employees.length; i++){
-    var resultArray = [];
-    console.log(empOutput(employees[i]));
-    resultArray = empOutput(employees[i]);
-    $('body').append('<ul> Employee: '+ employees[i][0]+'</ul>');
-    console.log(employees[i].length);
-      for (var j = 0; j < employees[i].length; j++){
-        $('body').append('<li>'+employeeTitles[j]+': '+employees[i][j]+'</li>');
-      }
-      for (var k = 1; k < resultArray.length; k++){
-        $('body').append('<li>'+resultsTitles[k]+': '+resultArray[k]+'</li>');
-      }
-    // $('body').append('<p>'+resultArray+'</p>');
+  bonusPercentCalc += getReviewScoreAdjustment(rating);
+  bonusPercentCalc += getSeniorityAdjustment(employeeNum);
+  bonusPercentCalc += getSalaryAdjustment(salary);
 
+  bonusPercentCalc += getPercentageRange(bonusPercentCalc);
 
-  }
+  return bonusPercentCalc;
 }
 
+function getReviewScoreAdjustment(rating){
+  var bonusPercent = 0;
 
-master(employees);
+  switch (rating) {
+    case 1:
+    bonusPercent += reviewScore1;
+    break;
 
+    case 2:
+    bonusPercent += reviewScore2;
+    break;
 
-// console.log(bonusCalc('1234', '30000', 2));
-// console.log(bonusCalc('3454', '7000', 3));
-// console.log(bonusCalc('56789', '70000', 5));
-// console.log(bonusCalc('78956', '65000', 3));
-//
-//
-//
-// console.log(empOutput(['Cooper', '1234', '30000', 2]));
-// console.log(empOutput(['Heraldo', '56789', '70000', 5]));
-// console.log(empOutput(['Blue', '3454', '7000', 3 ]));
-// console.log(empOutput(['Montel', '87654', '65000', 3]));
+    case 3:
+    bonusPercent += reviewScore3;
+    break;
+
+    case 4:
+    bonusPercent += reviewScore4;
+    break;
+
+    case 5:
+    bonusPercent += reviewScore5;
+    break;
+  }
+
+  return bonusPercent;
+}
+
+function getSeniorityAdjustment(employeeNum){
+  var bonusPercent = 0;
+  if (employeeNum.length == seniorityEmployeeIDLength) {
+    bonusPercent += seniorityBonusAdjustment;
+  }
+  return bonusPercent;
+}
+
+function getSalaryAdjustment(salary){
+  var bonusPercent = 0;
+  if (salary.parseInt > salaryMax) {
+    bonusPercent = salaryMaxPercentAdjustment;
+  }
+  return bonusPercent;
+}
+
+function getPercentageRange(bonusPercentCalc){
+  var bonusPercent = 0;
+  if(bonusPercent > bonusMax) {
+    bonusPercent = bonusMax;
+  }
+
+  else if (bonusPercent < bonusMin) {
+    bonusPercent = bonusMin;
+  }
+  return bonusPercent;
+}
+
+function displayDataArrays () {
+    // $('body').append('<ul> Employee: '+ employees[i][0]+'</ul>');
+    // console.log(employees[i].length);
+    //   for (var j = 0; j < employees[i].length; j++){
+    //     $('body').append('<li>'+employeeTitles[j]+': '+employees[i][j]+'</li>');
+    //   }
+    //   for (var k = 1; k < resultArray.length; k++){
+    //     $('body').append('<li>'+resultsTitles[k]+': '+resultArray[k]+'</li>');
+    //   }
+    //    $('body').append('<p>'+resultArray+'</p>');
+    // }
+}
