@@ -24,10 +24,10 @@ var seniorityEmployeeIDLength = 4;
 var seniorityBonusAdjustment = 0.05;
 
 var salaryMax = 65000;
-var salaryMaxPercentAdjustment = 0.01;
+var salaryMaxPercentAdjustment = -0.01;
 
 var bonusMax = 0.13;
-var bonusMin = 0;
+var bonusMin = 0.00;
 
 
 
@@ -71,18 +71,21 @@ return result;
 }
 
 function calculateBonusPercent(employeeNum,salary,rating){
-  var bonusPercentCalc;
+  var bonusPercentCalc = 0;
 
   bonusPercentCalc += getReviewScoreAdjustment(rating);
+  console.log("bonusPercentCalc after rating",bonusPercentCalc);
   bonusPercentCalc += getSeniorityAdjustment(employeeNum);
+  console.log("bonusPercentCalc after Seniority",bonusPercentCalc);
   bonusPercentCalc += getSalaryAdjustment(salary);
-
-  bonusPercentCalc += getPercentageRange(bonusPercentCalc);
+  console.log("bonusPercentCalc after Salary", bonusPercentCalc);
+  bonusPercentCalc = getPercentageRange(bonusPercentCalc);
 
   return bonusPercentCalc;
 }
 
 function getReviewScoreAdjustment(rating){
+  console.log("Rating",rating);
   var bonusPercent = 0;
 
   switch (rating) {
@@ -106,7 +109,7 @@ function getReviewScoreAdjustment(rating){
     bonusPercent += reviewScore5;
     break;
   }
-
+  console.log("bonusPercent",bonusPercent);
   return bonusPercent;
 }
 
@@ -115,19 +118,22 @@ function getSeniorityAdjustment(employeeNum){
   if (employeeNum.length == seniorityEmployeeIDLength) {
     bonusPercent += seniorityBonusAdjustment;
   }
+  console.log("bonusPercent in getSeniorityAdjustment", bonusPercent);
   return bonusPercent;
 }
 
 function getSalaryAdjustment(salary){
   var bonusPercent = 0;
-  if (salary.parseInt > salaryMax) {
+  console.log("salary.parseInt in getSalaryAdjustment", parseInt(salary));
+  if (parseInt(salary) > salaryMax) {
     bonusPercent = salaryMaxPercentAdjustment;
   }
+  console.log("bonusPercent in getSalaryAdjustment", bonusPercent);
   return bonusPercent;
 }
 
 function getPercentageRange(bonusPercentCalc){
-  var bonusPercent = 0;
+  var bonusPercent = bonusPercentCalc;
   if(bonusPercent > bonusMax) {
     bonusPercent = bonusMax;
   }
