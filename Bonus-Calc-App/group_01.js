@@ -50,6 +50,7 @@ main(employees);
 function main(employees) {
   for (var i = 0; i < employees.length; i++){
     resultArray = empOutput(employees[i]);
+    console.log(resultArray);
     displayDataArrays(employees[i],resultArray);
   }
 }
